@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import FileUpload from './Components/FileUpload';
+import Table from './Components/Table';
+import Pagination from './Components/Pagination';
+import PageSelector from './Components/PageSelector';
+import './Assets/App.css';
 
-function App() {
+const App = () => {
+  const [data, setData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const indexOfLastRow = page * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentRows = data.slice(indexOfFirstRow, indexOfLastRow);
+
+  const totalPages = Math.ceil(data.length / rowsPerPage);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <FileUpload setData={setData} setPage={setPage} />
+      <PageSelector rowsPerPage={rowsPerPage} setRowsPerPage={setRowsPerPage} />
+      <Table data={currentRows} />
+      <Pagination
+        page={page}
+        setPage={setPage}
+        totalPages={totalPages}
+      />
     </div>
   );
-}
+};
 
 export default App;
